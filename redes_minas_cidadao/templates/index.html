@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <title>Equipamentos</title>
+    <a href="{{ url_for('download_excel') }}">Baixar Excel</a>
+    
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 100px; /* Adiciona margem para compensar o formulário fixo */
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        h3 {
+            color: #4CAF50;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        a {
+            text-decoration: none;
+            color: #4CAF50;
+            margin-right: 15px;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        button {
+            padding: 10px 15px;
+            background-color: #f44336;
+            border: none;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #d32f2f;
+        }
+
+        form {
+            display: flex;
+            flex-wrap: wrap;
+            margin-top: 10px;
+            gap: 15px;
+            position: fixed; /* Torna o formulário fixo */
+            top: 20px; /* Distância do topo da tela */
+            left: 50%;
+            transform: translateX(-50%); /* Centraliza o formulário */
+            background: white;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            z-index: 10; /* Garante que o formulário fique acima da tabela */
+        }
+
+        input[type="text"],
+        input[type="number"] {
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: calc(100% / 3 - 10px); /* Ajuste das colunas */
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus {
+            border-color: #4CAF50;
+            outline: none;
+        }
+
+        .alert {
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            color: #fff;
+        }
+
+        .alert.success {
+            background-color: #5cb85c;
+        }
+
+        .alert.error {
+            background-color: #d9534f;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .table-container {
+            margin-top: 180px; /* Adiciona margem para separar a tabela do formulário fixo */
+            overflow-y: auto; /* Permite rolagem da tabela */
+            max-height: 500px; /* Limita a altura da área de visualização */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Lista de Equipamentos</h2>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert {{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Departamento</th>
+                        <th>Hostname</th>
+                        <th>IP Rede Tight VNC</th>
+                        <th>Senha Tight VNC</th>
+                        <th>Equipamento</th>
+                        <th>Número de Série</th>
+                        <th>Monitor</th>
+                        <th>Fila Impressão</th>
+                        <th>Atendente</th>
+                        <th>Pontos em Uso</th>
+                        <th>Pontos Reserva</th>
+                        <th>Switch</th>
+                        <th>Porta Switch</th>
+                        <th>VLAN</th>
+                        <th>DHCP</th>
+                        <th>Ações</th>
+                        <th>Excluir</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for equipamento in equipamentos %}
+                        <tr>
+                            <td>{{ equipamento.id }}</td>
+                            <td>{{ equipamento.departamento }}</td>
+                            <td>{{ equipamento.hostname }}</td>
+                            <td>{{ equipamento.ip_rede_tight_vnc }}</td>
+                            <td>{{ equipamento.senha_tight_vnc }}</td>
+                            <td>{{ equipamento.equipamento }}</td>
+                            <td>{{ equipamento.numero_serie }}</td>
+                            <td>{{ equipamento.monitor }}</td>
+                            <td>{{ equipamento.fila_impressao }}</td>
+                            <td>{{ equipamento.atendente }}</td>
+                            <td>{{ equipamento.pontos_em_uso }}</td>
+                            <td>{{ equipamento.pontos_reserva }}</td>
+                            <td>{{ equipamento.switch }}</td>
+                            <td>{{ equipamento.porta_switch }}</td>
+                            <td>{{ equipamento.vlan }}</td>
+                            <td>{{ equipamento.dhcp }}</td>
+                            <td>
+                                <a href="{{ url_for('edit', id=equipamento.id) }}">Editar</a>
+                                <form action="{{ url_for('delete', id=equipamento.id) }}" method="POST" style="display:inline;">
+                                    <button type="submit">Excluir</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+                
+            </table>
+        </div>
+
+        <h3>Adicionar Equipamento</h3>
+        <form method="POST" action="{{ url_for('add') }}">
+            <input type="text" name="departamento" placeholder="Departamento" required>
+            <input type="text" name="hostname" placeholder="Hostname" required>
+            <input type="text" name="ip_rede_tight_vnc" placeholder="IP Rede Tight VNC">
+            <input type="text" name="senha_tight_vnc" placeholder="Senha Tight VNC">
+            <input type="text" name="equipamento" placeholder="Equipamento" required>
+            <input type="text" name="numero_serie" placeholder="Número de Série" required>
+            <input type="text" name="monitor" placeholder="Monitor">
+            <input type="text" name="fila_impressao" placeholder="Fila Impressão">
+            <input type="text" name="atendente" placeholder="Atendente">
+            <input type="number" name="pontos_em_uso" placeholder="Pontos em Uso" required>
+            <input type="number" name="pontos_reserva" placeholder="Pontos Reserva" required>
+            <input type="text" name="switch" placeholder="Switch">
+            <input type="text" name="porta_switch" placeholder="Porta Switch">
+            <input type="text" name="vlan" placeholder="VLAN">
+            <input type="text" name="dhcp" placeholder="DHCP">
+            <button type="submit">Adicionar</button>
+        </form>
+    </div>
+
+    <div class="footer">
+        <a href="{{ url_for('download_excel') }}">Baixar Excel</a>
+        <a href="{{ url_for('inventario') }}">Inventário</a>
+        <a href="{{ url_for('dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('logout') }}">Sair</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <title>Editar Equipamento</title>
+</head>
+<body>
+    <div class="container">
+        <h2>Editar Equipamento</h2>
+        <form method="POST">
+            <input type="text" name="departamento" value="{{ equipamento.departamento }}" required>
+            <input type="text" name="hostname" value="{{ equipamento.hostname }}" required>
+            <input type="text" name="ip_rede_tight_vnc" value="{{ equipamento.ip_rede_tight_vnc }}">
+            <input type="text" name="senha_tight_vnc" value="{{ equipamento.senha_tight_vnc }}">
+            <input type="text" name="equipamento" value="{{ equipamento.equipamento }}" required>
+            <input type="text" name="numero_serie" value="{{ equipamento.numero_serie }}" required>
+            <input type="text" name="monitor" value="{{ equipamento.monitor }}">
+            <input type="text" name="fila_impressao" value="{{ equipamento.fila_impressao }}">
+            <input type="text" name="atendente" value="{{ equipamento.atendente }}">
+            <input type="number" name="pontos_em_uso" value="{{ equipamento.pontos_em_uso }}" required>
+            <input type="number" name="pontos_reserva" value="{{ equipamento.pontos_reserva }}" required>
+            <input type="text" name="switch" value="{{ equipamento.switch }}">
+            <input type="text" name="porta_switch" value="{{ equipamento.porta_switch }}">
+            <input type="text" name="vlan" value="{{ equipamento.vlan }}">
+            <input type="text" name="dhcp" value="{{ equipamento.dhcp }}">
+            <button type="submit">Salvar</button>
+            <button type="submit">Excluir</button>
+        </form>
+        <a href="{{ url_for('index') }}">Voltar</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard de Inventário</title>
+    <a href="{{ url_for('index') }}" class="btn-back">Voltar para o Index</a>
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 10px;
+            padding: 5px;
+            color: #333;
+        }
+
+        h1 {
+            background-color: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin: 0;
+        }
+
+        h2 {
+            color: #2c3e50;
+            padding: 10px 0;
+        }
+
+        table {
+            width: 80%;
+            margin: 80px auto;
+            border-collapse: collapse;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        table th, table td {
+            padding: 15px;
+            text-align: center;
+            border: 1px solid #ddd;
+            word-wrap: break-word;  /* Quebra de linha para evitar "embolado" */
+            max-width: 200px;  /* Limita o tamanho das colunas */
+        }
+
+        table th {
+            background-color: #3498db;
+            color: white;
+        }
+
+        table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        table tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .status-replacement {
+            font-weight: bold;
+        }
+
+        .status-replacement.replenish {
+            color: red;
+        }
+
+        .status-replacement.ok {
+            color: green;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .btn-back {
+            display: block;
+            margin: 20px 0;
+            padding: 20px;
+            background-color: #3498db;
+            color: white;
+            text-align: center;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+
+        .btn-back:hover {
+            background-color: #2980b9;
+        }
+
+        img {
+            display: block;
+            margin: 20px auto;
+            border: 6px solid #ddd;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            max-width: 100%;  /* Garante que a imagem não ultrapasse os limites */
+            height: auto;
+        }
+
+        .chart-container {
+            width: 80%;
+            margin: 20px auto;
+            background-color: white;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            overflow-x: auto;  /* Permite rolagem horizontal */
+        }
+
+        .table-container {
+            max-height: 400px;  /* Define a altura máxima da tabela */
+            overflow-y: auto;   /* Permite rolagem vertical */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Dashboard de Inventário</h1>
+
+        <a href="{{ url_for('index') }}" class="btn-back">Voltar para o Index</a>
+
+        <h2>Itens em Estoque</h2>
+        
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th>Categoria</th>
+                        <th>Quantidade</th>
+                        <th>Descrição</th>
+                        <th>Necessita Reposição?</th>
+                        <th>Ações</th> <!-- Nova coluna para o botão Editar -->
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in equipamentos_data %}
+                    <tr>
+                        <td>{{ item.label }}</td>
+                        <td>{{ item.category }}</td>
+                        <td>{{ item.value }}</td>
+                        <td>{{ item.description }}</td>
+                        <td class="status-replacement {% if item.value < 5 %}replenish{% else %}ok{% endif %}">
+                            {% if item.value < 5 %}
+                                Repor
+                            {% else %}
+                                OK
+                            {% endif %}
+                        </td>
+                        <!-- Botão de Edição -->
+                        <td>
+                            <a href="{{ url_for('edit_item', item_id=item.id) }}" class="btn-edit">Editar</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <h2>Gráfico de Quantidade de Itens</h2>
+        <div class="chart-container">
+            <img src="data:image/png;base64,{{ chart_data }}" alt="Gráfico de Quantidade de Itens" />
+        </div>
+    </div>
+
+</body>
+</html>

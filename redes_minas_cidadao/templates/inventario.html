@@ -1,0 +1,258 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <a href="{{ url_for('download_inventario_excel') }}" class="btn-download">Baixar Inventário de Cabos</a>
+
+    <title>Inventário</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .btn-back {
+            display: inline-block;
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            margin-bottom: 15px;
+        }
+
+        form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        label {
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        input[type="text"],
+        input[type="number"] {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: calc(50% - 10px);
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus {
+            border-color: #4CAF50;
+            outline: none;
+        }
+
+        button {
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #388E3C;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .alert {
+            padding: 15px;
+            margin-top: 10px;
+            border-radius: 4px;
+        }
+
+        .alert.success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .alert.error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Inventário de Equipamentos</h2>
+
+        <a href="{{ url_for('index') }}" class="btn-back">Voltar para o Index</a>
+        <a href="{{ url_for('dashboard') }}" class="btn-back">Voltar para dashboard</a>
+
+        
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert {{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <form action="{{ url_for('adicionar_item') }}" method="POST">
+            <!-- Campos para adicionar itens -->
+            <label>Modelo de Cabos:</label>
+            <input type="text" name="modelo_cabos" required>
+            <label>Quantidade de Cabos:</label>
+            <input type="number" name="quantidade_cabos" required>
+            <label>Modelo de Telefones:</label>
+            <input type="text" name="modelo_telefones">
+            <label>Quantidade de Telefones:</label>
+            <input type="number" name="quantidade_telefones">
+            <label>Modelo de Fones:</label>
+            <input type="text" name="modelo_fones">
+            <label>Quantidade de Fones:</label>
+            <input type="number" name="quantidade_fones">
+            <label>Modelo de Mouse:</label>
+            <input type="text" name="modelo_mouse">
+            <label>Quantidade de Mouse:</label>
+            <input type="number" name="quantidade_mouse">
+            <label>Modelo de Impressora:</label>
+            <input type="text" name="modelo_impressora">
+            <label>Quantidade de Impressoras:</label>
+            <input type="number" name="quantidade_impressora">
+            <label>Modelo de Desktop:</label>
+            <input type="text" name="modelo_desktop">
+            <label>Quantidade de Desktops:</label>
+            <input type="number" name="quantidade_desktop">
+            <label>Modelo de Controle:</label>
+            <input type="text" name="modelo_controle">
+            <label>Quantidade de Controles:</label>
+            <input type="number" name="quantidade_controle">
+            <label>Modelo de Fontes:</label>
+            <input type="text" name="modelo_fontes">
+            <label>Quantidade de Fontes:</label>
+            <input type="number" name="quantidade_fontes">
+            <label>Modelo de Organizadores de Cabos:</label>
+            <input type="text" name="modelo_organizadores_cabos">
+            <label>Quantidade de Organizadores de Cabos:</label>
+            <input type="number" name="quantidade_organizadores_cabos">
+            <label>Modelo de Tonner:</label>
+            <input type="text" name="modelo_tonner">
+            <label>Quantidade de Tonner:</label>
+            <input type="number" name="quantidade_tonner">
+            <label>Modelo de Pendrive:</label>
+            <input type="text" name="modelo_pendrive">
+            <label>Quantidade de Pendrives:</label>
+            <input type="number" name="quantidade_pendrive">
+            <label>Modelo de Extensão:</label>
+            <input type="text" name="modelo_extensao">
+            <label>Quantidade de Extensões:</label>
+            <input type="number" name="quantidade_extensao">
+        
+            <button type="submit">Adicionar Item</button>
+        </form>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Modelo de Cabos</th>
+                    <th>Quantidade de Cabos</th>
+                    <th>Modelo de Telefones</th>
+                    <th>Quantidade de Telefones</th>
+                    <th>Modelo de Fones</th>
+                    <th>Quantidade de Fones</th>
+                    <th>Modelo de Mouse</th>
+                    <th>Quantidade de Mouse</th>
+                    <th>Modelo de Impressora</th>
+                    <th>Quantidade de Impressoras</th>
+                    <th>Modelo de Desktop</th>
+                    <th>Quantidade de Desktops</th>
+                    <th>Modelo de Controle</th>
+                    <th>Quantidade de Controles</th>
+                    <th>Modelo de Fontes</th>
+                    <th>Quantidade de Fontes</th>
+                    <th>Modelo de Organizadores de Cabos</th>
+                    <th>Quantidade de Organizadores de Cabos</th>
+                    <th>Modelo de Tonner</th>
+                    <th>Quantidade de Tonner</th>
+                    <th>Modelo de Pendrive</th>
+                    <th>Quantidade de Pendrives</th>
+                    <th>Modelo de Extensão</th>
+                    <th>Quantidade de Extensões</th>
+                  
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in inventario %}
+                    <tr>
+                        <td>{{ item.id }}</td>
+                        <td>{{ item.modelo_cabos }}</td>
+                        <td>{{ item.quantidade_cabos }}</td>
+                        <td>{{ item.modelo_telefones }}</td>
+                        <td>{{ item.quantidade_telefones }}</td>
+                        <td>{{ item.modelo_fones }}</td>
+                        <td>{{ item.quantidade_fones }}</td>
+                        <td>{{ item.modelo_mouse }}</td>
+                        <td>{{ item.quantidade_mouse }}</td>
+                        <td>{{ item.modelo_impressora }}</td>
+                        <td>{{ item.quantidade_impressora }}</td>
+                        <td>{{ item.modelo_desktop }}</td>
+                        <td>{{ item.quantidade_desktop }}</td>
+                        <td>{{ item.modelo_controle }}</td>
+                        <td>{{ item.quantidade_controle }}</td>
+                        <td>{{ item.modelo_fontes }}</td>
+                        <td>{{ item.quantidade_fontes }}</td>
+                        <td>{{ item.modelo_organizadores_cabos }}</td>
+                        <td>{{ item.quantidade_organizadores_cabos }}</td>
+                        <td>{{ item.modelo_tonner }}</td>
+                        <td>{{ item.quantidade_tonner }}</td>
+                        <td>{{ item.modelo_pendrive }}</td>
+                        <td>{{ item.quantidade_pendrive }}</td>
+                        <td>{{ item.modelo_extensao }}</td>
+                        <td>{{ item.quantidade_extensao }}</td>
+                      
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
